@@ -16,8 +16,20 @@ return new class extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email');
+            $table->string('designation');
+            $table->string('father_name');
+            $table->string('mother_name');
+            $table->string('present_address');
+            $table->string('permanent_address');
+            $table->string('email')->unique();
+            $table->date('date_of_birth');
             $table->string('phone');
+            $table->string('religion');
+            $table->tinyInteger('gender');
+            $table->string('marital_status');
+            $table->string('image');
+            $table->text('career_objective');
+            $table->tinyInteger('status')->default('1');
             $table->timestamps();
         });
     }

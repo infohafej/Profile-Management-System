@@ -1,4 +1,4 @@
-@extends('post.layout')
+@extends('layout')
   
 @section('content')
 
@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <div class="col-md-12 text-end mt-4">
-                    <a class="btn btn-primary" href="{{ route('posts.index') }}">< Back</a>
+                    <a class="btn btn-primary" href="{{ route('profiles.index') }}">< Back</a>
                 </div>
             </div>
         </div>

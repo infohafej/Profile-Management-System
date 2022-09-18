@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Profile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ProfileController extends Controller
 {
@@ -39,11 +40,30 @@ class ProfileController extends Controller
     {
         $request->validate([
             'name' => 'required|max:255',
-            'email' => 'required|max:255',
-            'phone' => 'required|numeric',
+            'designation' => 'required',
+            'father_name' => 'required',
+            'mother_name' => 'required',
+            'email' => 'required',
+            'phone' => 'min:10|max:15',
+            'present_address' => 'required',            
+            'permanent_address' => 'required',
+            'date_of_birth' => 'required',
+            'religion' => 'required',
+            'image' => 'required',
+            'career_objective' => 'required'
         ]);
+        //dd($request->file('image'));
+
+        $input = $request->all();
+
+        if ($image = $request->file('image')) {
+            $destinationPath = '/uploads/profile-picture';
+            $profilePicture = $request->name . "." . $image->getClientOriginalExtension();
+            $image->move(public_path().$destinationPath, $profilePicture); 
+            $input['image'] = "$profilePicture";
+        }
       
-        Profile::create($request->all());
+        Profile::create($input);
        
         return redirect()->route('profiles.index')
                         ->with('success','Profile created successfully.');
@@ -80,10 +100,22 @@ class ProfileController extends Controller
      */
     public function update(Request $request, Profile $profile)
     {
+       
         $request->validate([
             'name' => 'required|max:255',
-            'email' => 'required|max:255',
-            'phone' => 'required|numeric',
+            'designation' => 'required',
+            'father_name' => 'required',
+            'mother_name' => 'required',
+            'email' => 'required',
+            'phone' => 'min:10|max:15',
+            'gender' => 'required',
+            'present_address' => 'required',            
+            'permanent_address' => 'required',
+            'date_of_birth' => 'required',
+            'religion' => 'required',
+            'marital_status' => 'required',
+            'image' => 'required',
+            'career_objective' => 'required'
         ]);
       
         $profile->update($request->all());
