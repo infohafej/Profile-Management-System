@@ -5,6 +5,7 @@ use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
+
 class ProfileController extends Controller
 {
     /**
@@ -49,8 +50,8 @@ class ProfileController extends Controller
             'permanent_address' => 'required',
             'date_of_birth' => 'required',
             'religion' => 'required',
-            'image' => 'required',
-            'career_objective' => 'required'
+            'career_objective' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
         //dd($request->file('image'));
 
@@ -108,20 +109,32 @@ class ProfileController extends Controller
             'mother_name' => 'required',
             'email' => 'required',
             'phone' => 'min:10|max:15',
-            'gender' => 'required',
             'present_address' => 'required',            
             'permanent_address' => 'required',
             'date_of_birth' => 'required',
             'religion' => 'required',
-            'marital_status' => 'required',
-            'image' => 'required',
-            'career_objective' => 'required'
+            'career_objective' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
-      
-        $profile->update($request->all());
-      
+  
+        $input = $request->all();
+  
+        if ($image = $request->file('image')) {
+            $destinationPath = 'uploads/profile-picture/'.$profile->image;
+            if(File::exists($destinationPath)){
+                File::delete($destinationPath);
+            }
+            $profileImage = $request->name . "." . $image->getClientOriginalExtension();
+            $image->move('uploads/profile-picture/', $profileImage);
+            $input['image'] = "$profileImage";
+        }else{
+            unset($input['image']);
+        }
+          
+        $profile->update($input);
+    
         return redirect()->route('profiles.index')
-                        ->with('success','Profile updated successfully');
+                        ->with('success','Data updated successfully');
     }
 
     /**
@@ -132,7 +145,12 @@ class ProfileController extends Controller
      */
     public function destroy(Profile $profile)
     {
-        $Profile->delete();
+        $destinationPath = 'uploads/profile-picture/'.$profile->image;
+        //dd($destinationPath);
+        if(File::exists($destinationPath)){
+            File::delete($destinationPath);
+        }
+        $profile->delete();
        
         return redirect()->route('profiles.index')
                         ->with('success','Profile deleted successfully');

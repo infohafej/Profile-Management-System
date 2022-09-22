@@ -39,7 +39,7 @@
                     <td>{{ $profile->name }}</td>
                     <td>{{ $profile->email }}</td>
                     <td>
-                        <form action="{{ route('profiles.destroy',$profile->id) }}" method="profile">
+                        <form action="{{ route('profiles.destroy',$profile->id) }}" method="post">
            
                             <a class="btn btn-info btn-sm text-white" href="{{ route('profiles.show',$profile->id) }}">Show</a>
             
@@ -48,7 +48,7 @@
                             @csrf
                             @method('DELETE')
               
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            <button type="submit" onclick="return confirm('Are you sure?');" title="Delete" class="btn btn-sm btn-danger"> Delete </button>
                         </form>
                     </td>
                 </tr>
